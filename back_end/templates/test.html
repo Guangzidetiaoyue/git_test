@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <!--指定编码格式，防止中文乱码-->
+    <meta charset="utf-8">
+    <title>ECharts</title>
+    <!-- 引入 echarts.js -->
+    <script src="{{ url_for('static', filename='echarts.min.js') }}"></script>
+</head>
+<!-- <body> -->
+<!--设定图像的对齐方式为居中对齐-->
+<!-- <div align="center"></div> -->
+<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <!-- <div id="main" style="width: 600px;height:400px;"></div> -->
+ <!-- 放在<script></script>之间的是文本类型(text),javascript是告诉浏览器里面的文本是属于javascript脚本 -->
+ 
+ <body style="height: 100%; margin: 0">
+    <div id="container" style="width: 1000px;height:400px; position: relative; top: 50px; left: 800px;"></div>
+    <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <div id="container1" style="width: 900px;height:400px; position: relative; top: 100px; left: 20px;"></div>
+    <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <div id="container2" style="width: 1000px;height:400px; position: absolute; top: 500px; left: 800px; float：left;"></div>
+    <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+
+<script type="text/javascript" >
+    // 基于准备好的dom，初始化echarts实例
+    var dom = document.getElementById('container');
+    var myChart = echarts.init(dom, null, {
+      renderer: 'canvas',
+      useDirtyRect: false
+    });
+    var app = {};
+    var option;
+
+    var word_query = word_query
+    var dates = dates;
+    var count_test = [{% for item in count_test %}{{ item |tojson | safe}},{% endfor %}]
+    var rank_test = [{% for item0 in rank_test %}{{ item0 |tojson | safe}},{% endfor %}]
+    var freq_test = [{% for item1 in freq_test %}{{ item1 |tojson | safe}},{% endfor %}]
+
+    option = {
+    tooltip: {
+        trigger: 'axis',
+        position: function (pt) {
+        return [pt[0], '10%'];
+        }
+    },
+    title: {
+        left: 'center',
+        text: 'Rank of Grams by Date'
+    },
+    toolbox: {
+        feature: {
+        dataZoom: {
+            yAxisIndex: 'none'
+        },
+        restore: {},
+        saveAsImage: {}
+        }
+    },
+    xAxis: {
+        type: 'time',
+        boundaryGap: false
+    },
+    yAxis: {
+        type: 'value',
+        boundaryGap: [0, '100%']
+    },
+    dataZoom: [
+        {
+        type: 'inside',
+        start: 0,
+        end: 20
+        },
+        {
+        start: 0,
+        end: 20
+        }
+    ],
+    series: [
+        {
+        name: word_query,
+        type: 'line',
+        smooth: true,
+        symbol: 'none',
+        areaStyle: {},
+        data: rank_test
+        }
+    ]
+    };
+
+    if (option && typeof option === 'object') {
+      myChart.setOption(option);
+    }
+
+    window.addEventListener('resize', myChart.resize);
+    </script>
+
+<script type="text/javascript" >
+    // 基于准备好的dom，初始化echarts实例
+    var dom = document.getElementById('container1');
+    var myChart = echarts.init(dom, null, {
+      renderer: 'canvas',
+      useDirtyRect: false
+    });
+    var app = {};
+    var option;
+
+    var word_query = word_query
+    var dates = dates;
+    var count_test = [{% for item in count_test %}{{ item |tojson | safe}},{% endfor %}]
+    var rank_test = [{% for item0 in rank_test %}{{ item0 |tojson | safe}},{% endfor %}]
+    var freq_test = [{% for item1 in freq_test %}{{ item1 |tojson | safe}},{% endfor %}]
+
+    option = {
+    tooltip: {
+        trigger: 'axis',
+        position: function (pt) {
+        return [pt[0], '10%'];
+        }
+    },
+    title: {
+        left: 'center',
+        text: 'Frequence of Grams by Date'
+    },
+    toolbox: {
+        feature: {
+        dataZoom: {
+            yAxisIndex: 'none'
+        },
+        restore: {},
+        saveAsImage: {}
+        }
+    },
+    xAxis: {
+        type: 'time',
+        boundaryGap: false
+    },
+    yAxis: {
+        type: 'value',
+        boundaryGap: [0, '100%']
+    },
+    dataZoom: [
+        {
+        type: 'inside',
+        start: 0,
+        end: 20
+        },
+        {
+        start: 0,
+        end: 20
+        }
+    ],
+    series: [
+        {
+        name: word_query,
+        type: 'line',
+        smooth: true,
+        symbol: 'none',
+        areaStyle: {},
+        data: freq_test
+        }
+    ]
+    };
+
+    if (option && typeof option === 'object') {
+      myChart.setOption(option);
+    }
+
+    window.addEventListener('resize', myChart.resize);
+    </script>
+
+<script type="text/javascript" >
+    // 基于准备好的dom，初始化echarts实例
+    var dom = document.getElementById('container2');
+    var myChart = echarts.init(dom, null, {
+      renderer: 'canvas',
+      useDirtyRect: false
+    });
+    var app = {};
+    var option;
+
+    var dates = dates;
+    var word_query = word_query
+    var count_test = [{% for item in count_test %}{{ item |tojson | safe}},{% endfor %}]
+    var rank_test = [{% for item0 in rank_test %}{{ item0 |tojson | safe}},{% endfor %}]
+    var freq_test = [{% for item1 in freq_test %}{{ item1 |tojson | safe}},{% endfor %}]
+
+    option = {
+    tooltip: {
+        trigger: 'axis',
+        position: function (pt) {
+        return [pt[0], '10%'];
+        }
+    },
+    title: {
+        left: 'center',
+        text: 'Count of Grams by Date'
+    },
+    toolbox: {
+        feature: {
+        dataZoom: {
+            yAxisIndex: 'none'
+        },
+        restore: {},
+        saveAsImage: {}
+        }
+    },
+    xAxis: {
+        type: 'time',
+        boundaryGap: false
+    },
+    yAxis: {
+        type: 'value',
+        boundaryGap: [0, '100%']
+    },
+    dataZoom: [
+        {
+        type: 'inside',
+        start: 0,
+        end: 20
+        },
+        {
+        start: 0,
+        end: 20
+        }
+    ],
+    series: [
+        {
+        name: word_query,
+        type: 'line',
+        smooth: true,
+        symbol: 'none',
+        areaStyle: {},
+        data: count_test
+        }
+    ]
+    };
+
+    if (option && typeof option === 'object') {
+      myChart.setOption(option);
+    }
+
+    window.addEventListener('resize', myChart.resize);
+    </script>
+</body>
+</html>
+

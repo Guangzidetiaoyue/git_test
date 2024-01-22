@@ -1,0 +1,168 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+html,body {
+	width: 100%;
+	height: 100%;
+}
+.main {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	/* background: url(./images/bg.jpg) no-repeat; */
+	background-size: cover; 
+	/* height: 880px; */
+	min-width: 960px;
+}
+.top_title {
+	width: 100%;
+	padding-top: 20px;
+}
+.top_title img {
+	width: 100%;
+}
+.menu {
+	width: 100%;
+	height: auto;
+	margin-top: 20px;
+	overflow: hidden;
+}
+.menu_date {
+	width: 45%;
+	border: 0;
+	text-align: center;
+	float: left;
+}
+.menu_search {
+	width: 55%;
+	border: 0;
+	text-align: center;
+	float: left;
+}
+.menu label {
+	width: 20%;
+	height: 36px;
+	font-size: 16px;
+	padding: 0 10px;
+	color: #000;
+	text-align: center;
+	font-weight: 600;
+}
+.menu input {
+	width: 50%;
+	height: 36px;
+	font-size: 14px;
+	appearance: none;
+	text-align: center;
+	border-radius: 15px;
+	border: 0px solid #fff;
+	padding: 0 10px;
+	outline: 0;
+	letter-spacing: 1px;
+	color: #000;
+	font-weight: 600;
+	/* background: rgba(45,45,45,.10); */
+	background: rgba(252, 250, 250, 0.1);
+	border: 2px solid rgba(148, 148, 148, 0.15);
+	text-shadow: 0 1px 2px rgba(0,0,0,.1);
+	/* box-shadow: 0 0 5px 4px rgba(0, 0, 0,0.1); */
+}
+input::placeholder {
+	color: #a1a1a1;
+}
+.menu select {
+    width: 15%;
+    height: 36px;
+    padding: 0 10px;
+    font-size: 14px;
+	font-weight: 600;
+    color: #000;
+    background: rgba(252, 250, 250, 0.1);
+	border: 2px solid rgba(148, 148, 148, 0.15);
+    border-radius: 15px;
+    /* -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075); */
+    /* box-shadow: 0 0 5px 4px rgba(0, 0, 0,0.1); */
+    /* -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s; */
+	margin-left: 100px;
+	text-align: center;
+}
+/* IE浏览器下隐藏下拉按钮 */
+select::-ms-expand { display: none; }     
+/* 定义隐藏下拉框默认样式及图片覆盖下拉按钮 */   
+.info-select{
+    width: 20%;
+    outline:none;
+    appearance:none;
+    -moz-appearance:none;
+    -webkit-appearance:none;
+    -ms-appearance:none;
+    background: url(img/down.png) no-repeat scroll right center transparent;           
+}
+
+.menu button {
+	border: none;
+	outline: none;
+	height: 36px;
+	width: 36px;
+	cursor: pointer;
+	background: transparent;
+	border-radius: 15px;
+	transform: translateX(-36px);
+}
+.menu button::before{
+	content: "\f002";
+	font-family: FontAwesome;
+	font-size: 16px;
+	color: #F9F0DA;
+}
+.datas {
+	width: 100%;
+	height: 75%;
+	margin-top: 30px;
+	overflow: hidden;
+}
+.data_left {
+	float: left;
+	width: 45%;
+	height: 100%;
+}
+.data_left_up {
+	width: 94%;
+	height: 48%;
+	background: url(./images/dataBg.png) no-repeat;
+	background-size: 100%;
+	text-align: center;
+	margin: 0 3%;
+}
+.data_left_down {
+	width: 94%;
+	height: 48%;
+	margin-top: 4%;
+	background: url(./images/dataBg.png) no-repeat;
+	background-size: 100%;
+	text-align: center;
+	margin-left: 3%;
+	margin-right: 3%;
+}
+.data_right {
+	float: left;
+	width: 55%;
+	height: 100%;
+}
+.data_right_up {
+	width: 94%;
+	height: 48%;
+	text-align: center;
+	margin: 0 3%;
+}
+.data_right_down {
+	width: 94%;
+	height: 48%;
+	margin-top: 4%;
+	text-align: center;
+	margin-left: 3%;
+	margin-right: 3%;
+}

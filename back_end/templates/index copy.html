@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Reddit数据可视化</title>
+  <link rel="stylesheet" href="{{url_for('static', filename='index.css')}}">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
+  <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+</head>
+<body>
+  <div class="main">
+    <div class="top_title">
+      <img src="{{url_for('static', filename='./images/top_title.png')}}"/>
+    </div>
+    <div class="menu">
+      <div class="menu_date">
+        <form action="/" method="post" id="date">
+          <label>Date:</label>
+          <input type="text" id="daterange" name="daterange" autocomplete="off"/>
+        </form>
+      </div>
+      <div class="menu_search">
+        <form action="/" method="post">
+          <input name="keyword" type="text" placeholder="Input n-gram">
+          <button type="submit"></button>
+        </form>
+      </div>
+    </div>
+    <div class="datas">
+      <div class="data_left">
+        <!-- <div class="left_top">
+          <form action="/" method="post" id="date">
+            <label class="left_top_title">选择日期:</label>
+            <input class="left_top_date" type="text" id="daterange" name="daterange" autocomplete="off"/>
+          </form>
+        </div> -->
+        <div class="data_left_up" id="cloud1"></div>
+        <div class="data_left_down" id="cloud2"></div>
+      </div>
+      <div class="data_right">
+        <!-- <div class="right_top">
+          <form action="/" method="post">
+            <input class="left_top_input" name="keyword" type="text" placeholder="输入关键词">
+            <button class="left_top_button" type="submit"></button>
+          </form>
+        </div> -->
+        <div class="data_right_up" id="beginday">
+        </div>
+        <div class="data_right_down" id="endday">
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-wordcloud@2.1.0/dist/echarts-wordcloud.min.js"></script>
+<script type="text/javascript">
+  // daterangepicker
+  $('#daterange').daterangepicker({
+    startDate: '{{startDate}}',
+    endDate: '{{endDate}}',
+    locale: {
+      format: 'YYYY-MM-DD'
+    },
+    ranges: {
+        'next day': [moment(), moment().add(1,'days')],
+        'next week': [moment(), moment().add(7,'days')],
+        'next month': [moment(), moment().add(1,'months')],
+        'next year': [moment(), moment().add(1,'years')],
+        'last day': [moment().subtract(1, 'days'), moment()],
+        'last week': [moment().subtract(7, 'days'), moment()],
+        'last month': [moment().subtract(1, 'months'), moment()],
+        'last year': [moment().subtract(1, 'years'), moment()],
+    },
+  });
+
+  $('#daterange').on('apply.daterangepicker', function(ev, picker) {
+    //do something, like clearing an input
+    $("#date").submit();
+  });
+
+  //word cloud1
+  var oldCloud = echarts.init(document.getElementById('cloud1'));
+  oldCloud.setOption({
+      series: [{
+          type: 'wordCloud',
+
+          // The shape of the "cloud" to draw. Can be any polar equation represented as a
+          // callback function, or a keyword present. Available presents are circle (default),
+          // cardioid (apple or heart shape curve, the most known polar equation), diamond (
+          // alias of square), triangle-forward, triangle, (alias of triangle-upright, pentagon, and star.
+
+          shape: 'circle',
+
+          // Keep aspect ratio of maskImage or 1:1 for shapes
+          // This option is supported since echarts-wordcloud@2.1.0
+          keepAspect: false,
+
+          // A silhouette image which the white area will be excluded from drawing texts.
+          // The shape option will continue to apply as the shape of the cloud to grow.
+
+          // maskImage: maskImage,
+          maskImage: null,
+
+          // Folllowing left/top/width/height/right/bottom are used for positioning the word cloud
+          // Default to be put in the center and has 75% x 80% size.
+
+          left: 'center',
+          top: 'center',
+          width: '70%',
+          height: '80%',
+          right: null,
+          bottom: null,
+
+          // Text size range which the value in data will be mapped to.
+          // Default to have minimum 12px and maximum 60px size.
+
+          sizeRange: [12, 60],
+
+          // Text rotation range and step in degree. Text will be rotated randomly in range [-90, 90] by rotationStep 45
+
+          rotationRange: [-90, 90],
+          rotationStep: 45,
+
+          // size of the grid in pixels for marking the availability of the canvas
+          // the larger the grid size, the bigger the gap between words.
+
+          gridSize: 8,
+
+          // set to true to allow word to be drawn partly outside of the canvas.
+          // Allow word bigger than the size of the canvas to be drawn
+          // This option is supported since echarts-wordcloud@2.1.0
+          drawOutOfBound: false,
+
+          // if the font size is too large for the text to be displayed,
+          // whether to shrink the text. If it is set to false, the text will
+          // not be rendered. If it is set to true, the text will be shrinked.
+          // This option is supported since echarts-wordcloud@2.1.0
+          shrinkToFit: false,
+
+          // If perform layout animation.
+          // NOTE disable it will lead to UI blocking when there is lots of words.
+          layoutAnimation: true,
+
+          // Global text style
+          textStyle: {
+              fontFamily: 'sans-serif',
+              fontWeight: 'bold',
+              // Color can be a callback function or a color string
+              color: function () {
+                  // Random color
+                  return 'rgb(' + [
+                      Math.round(Math.random() * 160),
+                      Math.round(Math.random() * 160),
+                      Math.round(Math.random() * 160)
+                  ].join(',') + ')';
+              }
+          },
+          emphasis: {
+              focus: 'self',
+
+              textStyle: {
+                  textShadowBlur: 10,
+                  textShadowColor: '#333'
+              }
+          },
+
+          // Data is an array. Each array item must have name and value property.
+          data: {{startHot | tojson | safe}}
+      }]
+  });
+  window.onresize = oldCloud.resize;
+
+  //word cloud
+  var newCloud = echarts.init(document.getElementById('cloud2'));
+  newCloud.setOption({
+      series: [{
+          type: 'wordCloud',
+
+          // The shape of the "cloud" to draw. Can be any polar equation represented as a
+          // callback function, or a keyword present. Available presents are circle (default),
+          // cardioid (apple or heart shape curve, the most known polar equation), diamond (
+          // alias of square), triangle-forward, triangle, (alias of triangle-upright, pentagon, and star.
+
+          shape: 'circle',
+
+          // Keep aspect ratio of maskImage or 1:1 for shapes
+          // This option is supported since echarts-wordcloud@2.1.0
+          keepAspect: false,
+
+          // A silhouette image which the white area will be excluded from drawing texts.
+          // The shape option will continue to apply as the shape of the cloud to grow.
+
+          // maskImage: maskImage,
+          maskImage: null,
+
+          // Folllowing left/top/width/height/right/bottom are used for positioning the word cloud
+          // Default to be put in the center and has 75% x 80% size.
+
+          left: 'center',
+          top: 'center',
+          width: '70%',
+          height: '80%',
+          right: null,
+          bottom: null,
+
+          // Text size range which the value in data will be mapped to.
+          // Default to have minimum 12px and maximum 60px size.
+
+          sizeRange: [12, 60],
+
+          // Text rotation range and step in degree. Text will be rotated randomly in range [-90, 90] by rotationStep 45
+
+          rotationRange: [-90, 90],
+          rotationStep: 45,
+
+          // size of the grid in pixels for marking the availability of the canvas
+          // the larger the grid size, the bigger the gap between words.
+
+          gridSize: 8,
+
+          // set to true to allow word to be drawn partly outside of the canvas.
+          // Allow word bigger than the size of the canvas to be drawn
+          // This option is supported since echarts-wordcloud@2.1.0
+          drawOutOfBound: false,
+
+          // if the font size is too large for the text to be displayed,
+          // whether to shrink the text. If it is set to false, the text will
+          // not be rendered. If it is set to true, the text will be shrinked.
+          // This option is supported since echarts-wordcloud@2.1.0
+          shrinkToFit: false,
+
+          // If perform layout animation.
+          // NOTE disable it will lead to UI blocking when there is lots of words.
+          layoutAnimation: true,
+
+          // Global text style
+          textStyle: {
+              fontFamily: 'sans-serif',
+              fontWeight: 'bold',
+              // Color can be a callback function or a color string
+              color: function () {
+                  // Random color
+                  return 'rgb(' + [
+                      Math.round(Math.random() * 160),
+                      Math.round(Math.random() * 160),
+                      Math.round(Math.random() * 160)
+                  ].join(',') + ')';
+              }
+          },
+          emphasis: {
+              focus: 'self',
+
+              textStyle: {
+                  textShadowBlur: 10,
+                  textShadowColor: '#333'
+              }
+          },
+
+          // Data is an array. Each array item must have name and value property.
+          data: {{endHot | tojson | safe}}
+      }]
+  });
+  window.onresize = newCloud.resize;
+
+  // count
+  // var start_test = [{% for item in startCount %}{{ item |tojson | safe}},{% endfor %}]
+  // var end_test = [{% for item in endCount %}{{ item |tojson | safe}},{% endfor %}]
+  
+  var beginEchart = echarts.init(document.getElementById('beginday'), null, {
+    renderer: 'canvas',
+    useDirtyRect: false
+  });
+
+  var option = {
+    tooltip: {
+        trigger: 'axis',
+        position: function (pt) {
+        return [pt[0], '10%'];
+        }
+    },
+    title: {
+        left: 'center',
+        text: 'Count of Grams by Date'
+    },
+    toolbox: {
+        feature: {
+        dataZoom: {
+            yAxisIndex: 'none'
+        },
+        restore: {},
+        saveAsImage: {}
+        }
+    },
+    xAxis: {
+        type: 'time',
+        boundaryGap: false
+    },
+    yAxis: {
+        type: 'value',
+        boundaryGap: [0, '100%']
+    },
+    dataZoom: [
+        {
+        type: 'inside',
+        start: 0,
+        end: 20
+        },
+        {
+        start: 0,
+        end: 20
+        }
+    ],
+    series: [
+        {
+        name: '{{startWord}}',
+        type: 'line',
+        smooth: true,
+        symbol: 'none',
+        areaStyle: {},
+        data: {{startCount | tojson | safe}}
+        }
+    ]
+    };
+  beginEchart.setOption(option);
+  window.onresize = beginEchart.resize;
+
+  // word2
+  var endEchart = echarts.init(document.getElementById('endday'), null, {
+    renderer: 'canvas',
+    useDirtyRect: false
+  });
+
+  var option = {
+    tooltip: {
+        trigger: 'axis',
+        position: function (pt) {
+        return [pt[0], '10%'];
+        }
+    },
+    title: {
+        left: 'center',
+        text: 'Count of Grams by Date'
+    },
+    toolbox: {
+        feature: {
+        dataZoom: {
+            yAxisIndex: 'none'
+        },
+        restore: {},
+        saveAsImage: {}
+        }
+    },
+    xAxis: {
+        type: 'time',
+        boundaryGap: false
+    },
+    yAxis: {
+        type: 'value',
+        boundaryGap: [0, '100%']
+    },
+    dataZoom: [
+        {
+        type: 'inside',
+        start: 0,
+        end: 20
+        },
+        {
+        start: 0,
+        end: 20
+        }
+    ],
+    series: [
+        {
+        name: '{{endWord}}',
+        type: 'line',
+        smooth: true,
+        symbol: 'none',
+        areaStyle: {},
+        data: {{endCount | tojson | safe}}
+        }
+    ]
+    };
+  endEchart.setOption(option);
+  window.onresize = endEchart.resize;
+</script>
